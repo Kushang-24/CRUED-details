@@ -17,20 +17,13 @@ function addRecord() {
         alert('Please enter all fields.');
         return;
     }
-    if (name == age == email) {
-    } else {
-        alert("Username already exists.")
-        clearForm()
-        deleteRecord(index)
-
-    }
-
     const newRecord = new Record(name, age, email);
     records.push(newRecord);
 
     displayRecords();
     clearForm();
 }
+
 window.onload = function () {
     records.push({ name: "Kushang Tanawala", age: 18, email: "kushangtanawal@gmail.com" });
     displayRecords();
