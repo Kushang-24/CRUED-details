@@ -24,7 +24,10 @@ function addRecord() {
     displayRecords();
     clearForm();
 }
-
+window.onload = function () {
+    records.push({ name: "Kushang Tanawala", age: 18, email: "kushangtanawal@gmail.com" });
+    displayRecords();
+};
 function displayRecords() {
     const tableBody = document.getElementById('recordTableBody');
     tableBody.innerHTML = '';
