@@ -17,6 +17,13 @@ function addRecord() {
         alert('Please enter all fields.');
         return;
     }
+    if (name == age == email) {
+    } else {
+        alert("Username already exists.")
+        clearForm()
+        deleteRecord(index)
+
+    }
 
     const newRecord = new Record(name, age, email);
     records.push(newRecord);
