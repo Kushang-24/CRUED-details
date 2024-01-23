@@ -1,4 +1,3 @@
-
 let records = [
     { name: 'Kushang Tanawala', age: 18, email: 'kushangtanawala@gmail.com' },
 ];
@@ -32,14 +31,15 @@ function addOrUpdateRecord() {
     const email = document.getElementById('email').value;
 
     const existingRecord = records.find(record => record.email === email);
-    
-    if (!name || !age || !email) {
-        alert('All fields are required.');
-        return;
-    }
 
-    if (existingRecord) {
-        alert('Record already exists.');
+    if (!name || !age || !email) {
+        alert('All Fields Are Required.');
+        return;
+    } else if (age <= 0) {
+        alert('You Enter Wrong Age')
+        return;
+    } else if (existingRecord) {
+        alert('Record Already Exists.');
     } else {
         const newRecord = { name, age, email };
         records.push(newRecord);
@@ -68,6 +68,12 @@ function deleteRecord(email) {
 }
 
 displayRecords();
+
+
+
+
+
+
 
 // Table Responsive Code //
 
