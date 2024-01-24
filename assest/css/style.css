@@ -3,35 +3,9 @@ body {
 }
 
 .details-m {
-  margin-top: -10%;
+  margin-top: 12%;
 }
 
 .form-m {
-  margin-top: 10%;
-}
-
-
-
-
-
-/* Table Responsive Code */
-
-.table-responsive-stack tr {
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: row;
-  flex-direction: row;
-}
-
-
-.table-responsive-stack td,
-.table-responsive-stack th {
-  display: block;
-  -ms-flex: 1 1;
-  flex: 1 1;
-}
-
-.table-responsive-stack .table-responsive-stack-thead {
-  font-weight: bold;
+  margin-top: 6%;
 }

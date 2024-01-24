@@ -1,115 +1,100 @@
-let records = [
+var records = [
     { name: 'Kushang Tanawala', age: 18, email: 'kushangtanawala@gmail.com' },
 ];
+window.onload = function () {
+    records.push();
+    updateTable();
+}
+var edit_id;
 
-function displayRecords() {
+function addRecord() {
+    const name = document.getElementById('name').value;
+    const age = document.getElementById('age').value;
+    const email = document.getElementById('email').value;
+
+    if (name === "" || email === "" || age === "") {
+        document.getElementById('completeError').innerHTML = 'complete the Information !';
+        return;
+    } else if (age <= 0) {
+        document.getElementById('ageError').innerHTML = 'Invalid age!';
+        return;
+    } else if (records.some(record => record.email === email)) {
+        document.getElementById('emailError').innerHTML = 'Record with the same email already exists !';
+        return;
+    }
+
+    const record = { name, age, email };
+    records.push(record);
+
+    updateTable();
+    saveToLocalStorage();
+    clearForm();
+}
+function updateInfo() {
+    let Username = document.getElementById('name').value;
+    let Userage = document.getElementById('age').value;
+    let Useremail = document.getElementById('email').value;
+
+    let recordObject = { Username, Userage, Useremail };
+
+    records[edit_id].name = Username;
+    records[edit_id].age = Userage;
+    records[edit_id].email = Useremail;
+    updateTable();
+    saveToLocalStorage();
+}
+function updateTable() {
     const tableBody = document.getElementById('recordsTableBody');
     tableBody.innerHTML = '';
 
-    records.forEach(record => {
-        const row = `<tr>
-                        <td>${record.name}</td>
-                        <td>${record.age}</td>
-                        <td>${record.email}</td>
-                        <td>
-                            <button class="btn btn-warning btn-sm" onclick="editRecord('${record.email}')">Edit</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteRecord('${record.email}')">Delete</button>
-                        </td>
-                    </tr>`;
-        tableBody.innerHTML += row;
+    records.forEach((record, id) => {
+        const row = tableBody.insertRow();
+        row.innerHTML = `
+                    <td>${record.name}</td>
+                    <td>${record.age}</td>
+                    <td>${record.email}</td>
+                    <td>
+                         <button type="button" class="btn btn-warning btn-sm" onclick="editRecord(${id})">Edit</button>
+                         <button type="button" class="btn btn-danger btn-sm" onclick="deleteRecord('${record.email}')">Delete</button>
+                    </td>`;
     });
+
+}
+function editRecord(id) {
+    console.log(id)
+    edit_id = id
+    const record = records[id];
+
+    document.getElementById('name').value = record.name;
+    document.getElementById('age').value = record.age;
+    document.getElementById('email').value = record.email;
+
+    updateTable();
+    saveToLocalStorage();
+}
+function deleteRecord(email) {
+    records = records.filter(record => record.email !== email);
+
+    updateTable();
+    saveToLocalStorage();
 }
 function clearForm() {
     document.getElementById('name').value = '';
     document.getElementById('age').value = '';
     document.getElementById('email').value = '';
+    document.getElementById('completeError').innerHTML = '';
+    document.getElementById('ageError').innerHTML = '';
+    document.getElementById('emailError').innerHTML = '';
+
 }
-
-function addOrUpdateRecord() {
-    const name = document.getElementById('name').value;
-    const age = document.getElementById('age').value;
-    const email = document.getElementById('email').value;
-
-    const existingRecord = records.find(record => record.email === email);
-
-    if (!name || !age || !email) {
-        alert('All Fields Are Required.');
-        return;
-    } else if (age <= 0) {
-        alert('You Enter Wrong Age')
-        return;
-    } else if (existingRecord) {
-        alert('Record Already Exists.');
-    } else {
-        const newRecord = { name, age, email };
-        records.push(newRecord);
-        displayRecords();
-    }
-    clearForm()
+function saveToLocalStorage() {
+    localStorage.setItem('records', JSON.stringify(records));
 }
-
-function editRecord(email) {
-    const recordToEdit = records.find(record => record.email === email);
-
-    if (recordToEdit) {
-        document.getElementById('name').value = recordToEdit.name;
-        document.getElementById('age').value = recordToEdit.age;
-        document.getElementById('email').value = recordToEdit.email;
-
-        records = records.filter(record => record.email !== email);
-
-        displayRecords();
+function loadFromLocalStorage() {
+    const storedRecords = localStorage.getItem('records');
+    if (storedRecords) {
+        records = JSON.parse(storedRecords);
+        updateTable();
     }
 }
-
-function deleteRecord(email) {
-    records = records.filter(record => record.email !== email);
-    displayRecords();
-}
-
-displayRecords();
-
-
-
-
-
-
-
-// Table Responsive Code //
-
-$(document).ready(function () {
-    $('.table-responsive-stack').each(function (i) {
-        var id = $(this).attr('id');
-        $(this).find("th").each(function (i) {
-            $('#' + id + ' td:nth-child(' + (i + 1) + ')').prepend('<span class="table-responsive-stack-thead">' + $(this).text() + ':</span> ');
-            $('.table-responsive-stack-thead').hide();
-        });
-    });
-
-    $('.table-responsive-stack').each(function () {
-        var thCount = $(this).find("th").length;
-        var rowGrow = 100 / thCount + '%';
-        $(this).find("th, td").css('flex-basis', rowGrow);
-    });
-
-    function flexTable() {
-        if ($(window).width() < 768) {
-
-            $(".table-responsive-stack").each(function (i) {
-                $(this).find(".table-responsive-stack-thead").show();
-                $(this).find('thead').hide();
-            });
-        } else {
-            $(".table-responsive-stack").each(function (i) {
-                $(this).find(".table-responsive-stack-thead").hide();
-                $(this).find('thead').show();
-            });
-        }
-    }
-
-    flexTable();
-
-    window.onresize = function (event) {
-        flexTable();
-    };
-});
+loadFromLocalStorage();
